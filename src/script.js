@@ -24,34 +24,35 @@ scene.fog = fog;
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
+const textureBase = `${import.meta.env.BASE_URL}textures/`;
 
-const doorColorTexture = textureLoader.load("/textures/door/color.jpg");
-const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
-const doorHeightTexture = textureLoader.load("/textures/door/height.jpg");
-const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
-const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
-const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+const doorColorTexture = textureLoader.load(`${textureBase}door/color.jpg`);
+const doorAlphaTexture = textureLoader.load(`${textureBase}door/alpha.jpg`);
+const doorHeightTexture = textureLoader.load(`${textureBase}door/height.jpg`);
+const doorMetalnessTexture = textureLoader.load(`${textureBase}door/metalness.jpg`);
+const doorNormalTexture = textureLoader.load(`${textureBase}door/normal.jpg`);
+const doorRoughnessTexture = textureLoader.load(`${textureBase}door/roughness.jpg`);
 const doorAmbientOcclusionexture = textureLoader.load(
-  "/textures/ambientOcclusion.jpg",
+  `${textureBase}door/ambientOcclusion.jpg`,
 );
 
-const bricksColorTexture = textureLoader.load("/textures/bricks/color.jpg");
+const bricksColorTexture = textureLoader.load(`${textureBase}bricks/color.jpg`);
 const bricksAmbientOcclusionTexture = textureLoader.load(
-  "/textures/bricks/ambientOcclusion.jpg",
+  `${textureBase}bricks/ambientOcclusion.jpg`,
 );
-const bricksNormalTexture = textureLoader.load("/textures/bricks/normal.jpg");
+const bricksNormalTexture = textureLoader.load(`${textureBase}bricks/normal.jpg`);
 const bricksRoughnessTexture = textureLoader.load(
-  "/textures/bricks/roughness.jpg",
+  `${textureBase}bricks/roughness.jpg`,
 );
 
-const grassColorTexture = textureLoader.load("/textures/grass/color.jpg");
+const grassColorTexture = textureLoader.load(`${textureBase}grass/color.jpg`);
 grassColorTexture.colorSpace = THREE.SRGBColorSpace;
 const grassAmbientOcclusionTexture = textureLoader.load(
-  "/textures/grass/ambientOcclusion.jpg",
+  `${textureBase}grass/ambientOcclusion.jpg`,
 );
-const grassNormalTexture = textureLoader.load("/textures/grass/normal.jpg");
+const grassNormalTexture = textureLoader.load(`${textureBase}grass/normal.jpg`);
 const grassRoughnessTexture = textureLoader.load(
-  "/textures/grass/roughness.jpg",
+  `${textureBase}grass/roughness.jpg`,
 );
 
 const grassTextures = [
@@ -68,25 +69,25 @@ for (const texture of grassTextures) {
   texture.repeat.set(8, 8);
 }
 
-const graveColorTexture = textureLoader.load("/textures/grave/color.jpg");
+const graveColorTexture = textureLoader.load(`${textureBase}grave/color.jpg`);
 graveColorTexture.colorSpace = THREE.SRGBColorSpace;
-const graveHeightTexture = textureLoader.load("/textures/grave/height.jpg");
+const graveHeightTexture = textureLoader.load(`${textureBase}grave/height.jpg`);
 const graveRoughnessTexture = textureLoader.load(
-  "/textures/grave/roughness.jpg",
+  `${textureBase}grave/roughness.jpg`,
 );
 
 // The inscription covers each broad face once; do not tile the lettering.
-const graveFaceColorTexture = textureLoader.load("/textures/grave/face-color.jpg");
+const graveFaceColorTexture = textureLoader.load(`${textureBase}grave/face-color.jpg`);
 graveFaceColorTexture.colorSpace = THREE.SRGBColorSpace;
-const graveFaceHeightTexture = textureLoader.load("/textures/grave/face-height.jpg");
+const graveFaceHeightTexture = textureLoader.load(`${textureBase}grave/face-height.jpg`);
 const graveFaceRoughnessTexture = textureLoader.load(
-  "/textures/grave/face-roughness.jpg",
+  `${textureBase}grave/face-roughness.jpg`,
 );
 
-const rockColorTexture = textureLoader.load("/textures/rock/color.jpg");
+const rockColorTexture = textureLoader.load(`${textureBase}rock/color.jpg`);
 rockColorTexture.colorSpace = THREE.SRGBColorSpace;
-const rockHeightTexture = textureLoader.load("/textures/rock/height.jpg");
-const rockRoughnessTexture = textureLoader.load("/textures/rock/roughness.jpg");
+const rockHeightTexture = textureLoader.load(`${textureBase}rock/height.jpg`);
+const rockRoughnessTexture = textureLoader.load(`${textureBase}rock/roughness.jpg`);
 
 // Keep the rock maps aligned and wrap them around each sphere.
 for (const texture of [

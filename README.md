@@ -2,6 +2,8 @@
 
 A browser-based haunted-house scene built with **Three.js**, **Vite**, and **dat.GUI**. Explore a foggy cemetery with a brick house, a glowing entrance, gothic gravestones, weathered rocks, and three moving colored lights.
 
+**[Open the live interactive scene](https://ajramoslem99.github.io/scary_house/)**
+
 This is an interactive graphics learning project. There is no backend, account setup, game objective, or collision system.
 
 ![Haunted house viewed from the front right, with its cemetery and rocky entrance](docs/screenshots/01-front-right.jpg)
@@ -104,6 +106,8 @@ scary_house/
 ├── index.html                 # Canvas and JavaScript entry point
 ├── package.json               # Dependencies and dev command
 ├── package-lock.json          # Locked dependency versions
+├── vite.config.mjs            # Relative asset paths for subdirectory hosting
+├── .github/workflows/deploy.yml # Build and deploy to GitHub Pages on main
 ├── src/
 │   ├── script.js              # Entire scene and render loop
 │   └── style.css              # Full-window canvas styling
@@ -212,20 +216,38 @@ Edit the existing sections in `src/script.js`; Vite reloads the page after sourc
 | Change light colors or brightness | Lights section |
 | Change ghost speed or motion | Animate section: angle multipliers and sine expressions |
 
-Place new images inside `public/textures/` and load them as `/textures/...`, without a `public` prefix. Keep related color, bump, and roughness maps aligned. Inscribed face images should use the grave's **3:4 width-to-height ratio** to avoid stretching.
+Place new images inside `public/textures/` and load them through the existing `textureBase` prefix, for example `` textureLoader.load(`${textureBase}grave/face-color.jpg`) ``. This prefix uses Vite's base URL, so textures resolve both locally and under the GitHub Pages repository path. Do not include `public` in the URL. Keep related color, bump, and roughness maps aligned. Inscribed face images should use the grave's **3:4 width-to-height ratio** to avoid stretching.
 
 ## Build and serve a production preview
 
-Only the `dev` script is currently defined in `package.json`. Use the installed Vite commands directly for production builds:
+Use the package scripts to build and preview the production site:
 
 ```bash
-npx vite build
-npx vite preview
+npm run build
+npm run preview
 ```
 
 The build produces `dist/`, including the bundled JavaScript, CSS, and copied public assets. Open the preview URL printed in the terminal. The preview server is for checking the build locally.
 
-For deployment, upload the **contents of `dist/`** to a static web host. No Node.js process or backend is needed on the production host. The current absolute texture URLs assume the site is served at the domain root. Hosting under a subdirectory requires adjusting those URLs as well as Vite's base setting.
+For deployment, upload the **contents of `dist/`** to a static web host. No Node.js process or backend is needed on the production host. Vite's relative base (`./`) and the matching texture prefix support both domain-root and repository-subdirectory hosting. `dist/` is generated and ignored by Git.
+
+### GitHub Pages
+
+Live URL: **https://ajramoslem99.github.io/scary_house/**
+
+The workflow in [deploy.yml](.github/workflows/deploy.yml) publishes the site whenever commits are pushed to `main`. It checks out the source, installs locked dependencies with `npm ci`, builds `dist/`, and deploys that build through GitHub Pages. You can also run it manually using **Actions → Deploy to GitHub Pages → Run workflow**.
+
+The repository's **Settings → Pages → Build and deployment → Source** must be **GitHub Actions**, rather than a branch containing the source files. Vite source files need a build before static hosting can run them. See the [GitHub Pages workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+To publish future changes:
+
+```bash
+git add <files-you-changed>
+git commit -m "Describe your change"
+git push origin main
+```
+
+Check the repository's Actions tab for deployment progress. A successful workflow updates the same live URL; allow a short delay for the published site to refresh.
 
 To test from another device on your local network:
 
@@ -241,7 +263,7 @@ There is currently no automated test suite or test script. Useful basic checks a
 
 ```bash
 node --check src/script.js
-npx vite build
+npm run build
 ```
 
 These verify JavaScript syntax and bundling; they do not prove that textures loaded or that the rendered scene looks correct. After material or lighting changes, also check in a browser:
@@ -253,13 +275,13 @@ These verify JavaScript syntax and bundling; they do not prove that textures loa
 5. The rocks and grass display their surface textures.
 6. The browser console and Network panel show whether any resources failed to load.
 
-The documentation update was checked with a production build and five captures of the running scene. The known door AO path issue below remains part of the current application.
+The documentation update was checked with a production build and captures of the running scene. The deployment configuration also makes all texture requests use the application's base path, including the corrected door ambient-occlusion image URL.
 
 ## Troubleshooting and current limitations
 
 ### A door texture request fails
 
-`doorAmbientOcclusionexture` currently loads `/textures/ambientOcclusion.jpg`, but the file is actually at `/textures/door/ambientOcclusion.jpg`. This causes a failed request and leaves that door shading map unavailable. To correct it, update that URL in the Textures section. The other door maps use the `door/` directory already.
+Open the browser's Network panel and check the failed URL. Texture files live under `public/textures/`, while requests use the `textureBase` prefix. In particular, the door ambient-occlusion file is `door/ambientOcclusion.jpg`, not `ambientOcclusion.jpg` at the textures root. Avoid adding a leading slash to new texture paths, since it bypasses the repository path on GitHub Pages.
 
 ### The console warns about `THREE.Clock`
 
